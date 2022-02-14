@@ -1,9 +1,35 @@
 version: "3.9"
 services:
+  server:
+    image: nginx:mainline-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d
   api:
-    build: ../database-api/Dockerfile-dev
+    build: 
+      context: ../database-api/.
+      dockerfile: Dockerfile-dev
+    environment:
+      NODE_OPTIONS: "--openssl-legacy-provider"
+    volumes:
+      - ../database-api/:/app
+
   frontend:
-    build: ../frontend/Dockerfile-dev
+    build: 
+      context: ../frontend/.
+      dockerfile: Dockerfile-dev
+    environment:
+      NODE_OPTIONS: "--openssl-legacy-provider"
+    volumes:
+      - ../frontend/:/app
+
   management:
-    build: ../management/Dockerfile-dev
+    build: 
+      context: ../management/.
+      dockerfile: Dockerfile-dev
+    environment:
+      NODE_OPTIONS: "--openssl-legacy-provider"
+    volumes:
+      - ../management/:/app
   
