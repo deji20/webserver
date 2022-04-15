@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  server:
+    image: nginx:mainline-alpine
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d
+  api:
+    build: 
+      context: ../../database-api/.
+      dockerfile: Dockerfile-dev
+    environment:
+      NODE_OPTIONS: "" #"--openssl-legacy-provider"
+    volumes:
+      - ../../database-api/:/app
+
+  frontend:
+    build: 
+      context: ../../frontend/.
+      dockerfile: Dockerfile-dev
+    environment:
+      NODE_OPTIONS: "--openssl-legacy-provider"
+    volumes:
+      - ../../frontend/:/app
+
+  management:
+    build: 
+      context: ../../management/.
+      dockerfile: Dockerfile-dev
+    environment:
+      NODE_OPTIONS: "--openssl-legacy-provider"
+    volumes:
+      - ../../management/:/app
+
+  database:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+  
