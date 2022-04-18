@@ -30,6 +30,7 @@ services:
       context: ../../management/.
       dockerfile: Dockerfile-dev
     environment:
+      PORT: 80
       NODE_OPTIONS: "--openssl-legacy-provider"
     volumes:
       - ../../management/:/app
